@@ -14,12 +14,6 @@ package "php5-redis"
 package "redis-server"
 package "php5-memcache"
 
-directory '/vagrant/www/pimcore' do
-  owner 'vagrant'
-  group 'vagrant'
-  action :create
-end
-
 # Nginx
 template "/etc/nginx/sites-available/#{node['dev_domain']}" do
   source "#{node['dev_domain']}.erb"
