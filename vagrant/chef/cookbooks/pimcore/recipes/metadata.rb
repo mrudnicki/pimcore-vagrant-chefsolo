@@ -1,0 +1,6 @@
+name                'pimcore'
+maintainer          'Maciek Rudnicki'
+maintainer_email    'maciej.rudnicki@pimcore.com'
+license             ''
+description         'Clean pimcore project installation'
+version             '0.1.0'
