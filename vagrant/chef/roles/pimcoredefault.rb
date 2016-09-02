@@ -10,7 +10,6 @@ run_list (
     ]
 )
 default_attributes ({
-        "dev_domain" => #{node["dev_domain"]},
         "php_memory_limit" => "512M",
         "dev_user" => "vagrant"
 })
