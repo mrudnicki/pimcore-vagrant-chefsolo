@@ -55,9 +55,10 @@ end
 
 git "checkout_pimcore_installation" do
     checkout_branch "master"
-    action  :checkout
+    action  :export
     repository  "https://github.com/pimcore/pimcore.git"
     destination "/vagrant/www/pimcore"
+    not_if { ::File.exists?('/vagrant/www/pimcore/index.php') }
 end
 
 bash "install_composer" do\
