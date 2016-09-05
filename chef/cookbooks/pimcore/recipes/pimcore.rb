@@ -25,7 +25,6 @@ template "/etc/nginx/sites-available/#{node['dev_domain']}" do
     :max_execution_time => node['max_execution_time'],
 
   )
-  notifies :reload, "service[nginx]", :delayed
 end
 
 link "/etc/nginx/sites-enabled/#{node['dev_domain']}" do
