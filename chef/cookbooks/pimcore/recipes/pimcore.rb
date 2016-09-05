@@ -16,7 +16,7 @@ package "php5-memcache"
 
 # Nginx
 template "/etc/nginx/sites-available/#{node['dev_domain']}" do
-  source "#{node['dev_domain']}.erb"
+  source "pimcore-v.local.erb"
   variables(
     :domain => node['dev_domain'],
     :path => node['mount_point'],
