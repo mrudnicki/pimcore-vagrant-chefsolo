@@ -45,6 +45,11 @@ bash "alias_for_ffmpeg" do
   code "echo \"alias ffmpeg='avconv'\" >> /etc/bash.bashrc && alias ffpmpeg='avconv'"
 end
 
+directory '/vagrant/www/pimcore' do
+    action :create
+    owner 'vagrant'
+    group 'vagrant'
+end
 
 git "checkout_pimcore_installation" do
     checkout_branch "master"
@@ -52,6 +57,7 @@ git "checkout_pimcore_installation" do
     repository  "https://github.com/pimcore/pimcore.git"
     destination "/vagrant/www/pimcore"
     not_if { ::File.exists?('/vagrant/www/pimcore/index.php') }
+    user "vagrant"
 end
 
 bash "install_composer" do\
