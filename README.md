@@ -11,8 +11,8 @@ Just use the command: ```vagrant plugin install vagrant-winnfsd``` in cmd
 
 ## Installation
 
-* In a terminal go to VagrantFile directory (```vagrant/```)
-* Find the configuration file example in: ```configuration_example/vagrant/chef/cookbooks/pimcore/attributes/default.rb``` and copy it to the ```vagrant/chef/cookbooks/pimcore/attributes``` directory (you can also change default values, for example domain name).
+* In a terminal go to VagrantFile directory
+* Find the configuration file example in: ```configuration_example/vagrant/chef/cookbooks/pimcore/attributes/default.rb``` and copy it to the ```chef/cookbooks/pimcore/attributes``` directory (you can also change default values, for example domain name).
 * type: ```vagrant up``` (you can also just open this project in PHPstorm and use vagrant up command)
 
 If you're using this vagrant box a first time it can take around 15 minutes. 
