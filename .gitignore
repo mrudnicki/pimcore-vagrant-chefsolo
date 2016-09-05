@@ -1,0 +1,6 @@
+www/*
+!www/.dummy
+.vagrant
+.idea
+chef/cookbooks/pimcore/attributes/*
+!chef/cookbooks/pimcore/attributes/.dummy
