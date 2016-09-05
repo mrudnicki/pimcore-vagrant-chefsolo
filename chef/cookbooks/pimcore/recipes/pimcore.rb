@@ -52,7 +52,7 @@ directory '/vagrant/www/pimcore' do
 end
 
 git "checkout_pimcore_installation" do
-    checkout_branch "master"
+    revision "master"
     action  :export
     repository  "https://github.com/pimcore/pimcore.git"
     destination "/vagrant/www/pimcore"
