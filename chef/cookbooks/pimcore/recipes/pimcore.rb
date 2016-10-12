@@ -1,7 +1,3 @@
-bash "create_database" do
-  code "mysql -u root -e 'CREATE DATABASE IF NOT EXISTS #{node["mysql_server"]["database_name"]} CHARACTER SET utf8 COLLATE utf8_general_ci;'"
-end
-
 # Recommended software
 
 package "php5-imagick"
@@ -14,26 +10,7 @@ package "php5-redis"
 package "redis-server"
 package "php5-memcache"
 
-# Nginx
-template "/etc/nginx/sites-available/#{node['dev_domain']}" do
-  source "pimcore-v.local.erb"
-  variables(
-    :domain => node['dev_domain'],
-    :path => node['mount_point'],
-    :host => node["php"]["fpm"]["host"],
-    :port => node["php"]["fpm"]["port"],
-    :max_execution_time => node['max_execution_time'],
 
-  )
-end
-
-link "/etc/nginx/sites-enabled/#{node['dev_domain']}" do
-  to "/etc/nginx/sites-available/#{node['dev_domain']}"
-end
-
-bash "restart_services" do
-  code "service nginx reload && service php5-fpm reload"
-end
 
 bash "install_libreoffice" do
   code "apt-get install libreoffice --no-install-recommends -y"
@@ -51,35 +28,61 @@ directory '/vagrant/www/pimcore' do
     group 'vagrant'
 end
 
-git "checkout_pimcore_installation" do
-    revision "master"
-    action  :export
-    repository  "https://github.com/pimcore/pimcore.git"
-    destination "/vagrant/www/pimcore"
-    not_if { ::File.exists?('/vagrant/www/pimcore/index.php') }
-    user "vagrant"
-end
 
-bash "install_composer" do\
+bash "install_composer" do
     code "php -r \"copy('https://getcomposer.org/installer', 'composer-setup.php');\"
           php -r \"if (hash_file('SHA384', 'composer-setup.php') === 'e115a8dc7871f15d853148a7fbac7da27d6c0030b848d9b3dc09e2a0388afed865e6a3d6b3c0fad45c48e2b5fc1196ae') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;\"
           php composer-setup.php
           php -r \"unlink('composer-setup.php');\"
-          php composer.phar install;
-          cp -R website_example website
           "
-    cwd  "/vagrant/www/pimcore"
-    not_if { ::File.exists?('/vagrant/www/pimcore/composer.phar') }
+    cwd  "/vagrant/www"
+    not_if { ::File.exists?('/vagrant/www/composer.phar') }
     user "vagrant"
 end
 
-directory '/vagrant/www/pimcore/website/var' do
-    mode '0777'
-    action :nothing
+node[:hosts].each do |project_id, host|
+  # database
+  bash "create_database_for_dashboard_plugin" do
+    code "mysql -u root -e 'CREATE DATABASE IF NOT EXISTS #{project_id} CHARACTER SET utf8 COLLATE utf8_general_ci;'"
+  end
+
+
+# Directory for the installation
+  directory host[:root_directory] do
+    owner 'vagrant'
+    group 'vagrant'
+    action :create
+  end
+
+# Nginx
+  template "/etc/nginx/sites-available/#{project_id}" do
+    source "default_pimcore_nginx_conf.erb"
+    variables(
+        :domain => host[:server_name],
+        :root_directory => host[:root_directory],
+        :host => node["php"]["fpm"]["host"],
+        :port => node["php"]["fpm"]["port"],
+        :max_execution_time => node['max_execution_time'],
+    )
+  end
+
+# install pimcore
+  composer_path = "#{host[:root_directory]}/composer.json"
+  bash "#{project_id}_pimcore_installation" do
+    cwd "/vagrant/www"
+    code <<-EOH
+        php composer.phar create-project pimcore/pimcore #{host[:root_directory]}
+    EOH
+    not_if { ::File.exists?(composer_path) }
+  end
+
+  link "/etc/nginx/sites-enabled/#{project_id}" do
+    to "/etc/nginx/sites-available/#{project_id}"
+  end
+
 end
 
-bash "update_composer" do
-    code "php composer.phar update"
-    cwd  "/vagrant/www/pimcore"
-    user "vagrant"
+
+bash "restart_services" do
+  code "service nginx reload && service php5-fpm reload"
 end
