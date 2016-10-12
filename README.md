@@ -9,10 +9,13 @@
 To optimize performance, Windows users should install the vagrant plugin. 
 Just use the command: ```vagrant plugin install vagrant-winnfsd``` in cmd
 
+## Optional configuration
+
+You can change some of the machine settings (e.g. domain) in chef/cookbooks/pimcore/attributes/default.rb
+
 ## Installation
 
 * In a terminal go to VagrantFile directory
-* Find the configuration file example in: ```configuration_example/vagrant/chef/cookbooks/pimcore/attributes/default.rb``` and copy it to the ```chef/cookbooks/pimcore/attributes``` directory (you can also change default values, for example domain name).
 * type: ```vagrant up``` (you can also just open this project in PHPstorm and use vagrant up command)
 
 If you're using this vagrant box a first time it can take around 15 minutes. 
@@ -23,8 +26,9 @@ Ok the environment is ready to use
 
  * Mysql, Nginx, php-fpm installed and configured
  * every package required by Pimcore installed
- * Pimcore project is in /vagrant/www/pimcore path
- * Host root configured to domain which you chose
+ * Pimcore project is in /vagrant/www/pimcore path on virtual machine
+ * Project's folder is shared live between your machine and virtual one
+ * Host root configured to domain which you chose (default: pimcore-vagrant.local)
  
 Type ```vagrant ssh```
 
