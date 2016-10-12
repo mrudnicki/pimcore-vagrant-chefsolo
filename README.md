@@ -1,4 +1,4 @@
-# Pimcore Vagrant project
+# Pimcore Vagrant Project
 
 ## Requirements
 
@@ -49,3 +49,8 @@ pass:
 ## Update
 
 Use `vagrant provision` command to update your VM
+
+## Resources
+
+* [The sites configuration - detailed information](./docs/04_Sites.md)
+* [Cases - when use that setup](./docs/08_Examples.md)
