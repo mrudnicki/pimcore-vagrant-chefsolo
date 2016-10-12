@@ -42,7 +42,7 @@ For example:
 
 MySQL credentials:
 
-database: pimcore
+database: The identifier of your project. `pimcore1` if you used the example configuration file.
 user: root
 pass: 
 
