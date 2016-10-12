@@ -22,12 +22,6 @@ bash "alias_for_ffmpeg" do
   code "echo \"alias ffmpeg='avconv'\" >> /etc/bash.bashrc && alias ffpmpeg='avconv'"
 end
 
-directory '/vagrant/www/pimcore' do
-    action :create
-    owner 'vagrant'
-    group 'vagrant'
-end
-
 
 bash "install_composer" do
     code "php -r \"copy('https://getcomposer.org/installer', 'composer-setup.php');\"
